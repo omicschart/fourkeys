@@ -15,9 +15,15 @@
 apiVersion: 1
 
 providers:
-  - name: Four Keys
+  - name: Four Keys - Node.js Backend - actual + mocked data
     type: file
     updateIntervalSeconds: 100
     allowUiUpdates: true
     options:
-      path: /etc/grafana/dashboards
+      path: /etc/grafana/dashboards/fourkeys_dashboard.json
+  - name: Four Keys - Node.js Backend - actual
+    type: file
+    updateIntervalSeconds: 100
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/dashboards/fourkeys_dashboard_actual.json

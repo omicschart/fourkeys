@@ -28,6 +28,7 @@ COPY grafana.ini /etc/grafana
 
 # Provisioning dashboards and datasources
 COPY fourkeys_dashboard.json /etc/grafana/dashboards/
+COPY fourkeys_dashboard_actual.json /etc/grafana/dashboards/
 COPY dashboards.yaml /etc/grafana/provisioning/dashboards
 COPY datasource.yaml /etc/grafana/provisioning/datasources
 
