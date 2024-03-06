@@ -228,7 +228,7 @@
             "location": "EU",
             "project": "gglobo-deployment-frq-hdg-prd",
             "rawQuery": true,
-            "rawSql": "SELECT \n CASE\n  WHEN median_time_to_change < 24 * 60 then \"One day\"\n  WHEN median_time_to_change < 168 * 60 then \"One week\"\n  WHEN median_time_to_change < 730 * 60 then \"One month\"\n  WHEN median_time_to_change < 730 * 6 * 60 then \"Six months\"\n  ELSE \"One year\"\n END as lead_time_to_change\nFROM (\n SElECT\n  IFNULL(ANY_VALUE(med_time_to_change), 0) AS median_time_to_change\n FROM (\n   SELECT\n   PERCENTILE_CONT(\n    IF(TIMESTAMP_DIFF(d.time_created, c.time_created, MINUTE) > 0, TIMESTAMP_DIFF(d.time_created, c.time_created, MINUTE), NULL), # Ignore automated pushes\n    0.5) # Median\n    OVER () AS med_time_to_change, # Minutes\n  FROM four_keys.deployments d, d.changes\n  LEFT JOIN four_keys.changes c ON changes = c.change_id\n  WHERE d.time_created > TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 3 MONTH))\n    AND d.source <> \"gitlabmock\" AND c.source <> \"gitlabmock\"\n )\n)",
+            "rawSql": "SELECT \n CASE\n  WHEN median_time_to_change < 24 then \"One hour\"\n  WHEN median_time_to_change < 24 * 60 then \"One day\"\n  WHEN median_time_to_change < 168 * 60 then \"One week\"\n  WHEN median_time_to_change < 730 * 60 then \"One month\"\n  WHEN median_time_to_change < 730 * 6 * 60 then \"Six months\"\n  ELSE \"One year\"\n END as lead_time_to_change\nFROM (\n SElECT\n  IFNULL(ANY_VALUE(med_time_to_change), 0) AS median_time_to_change\n FROM (\n   SELECT\n   PERCENTILE_CONT(\n    IF(TIMESTAMP_DIFF(d.time_created, c.time_created, MINUTE) > 0, TIMESTAMP_DIFF(d.time_created, c.time_created, MINUTE), NULL), # Ignore automated pushes\n    0.5) # Median\n    OVER () AS med_time_to_change, # Minutes\n  FROM four_keys.deployments d, d.changes\n  LEFT JOIN four_keys.changes c ON changes = c.change_id\n  WHERE d.time_created > TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 3 MONTH))\n    AND d.source <> \"gitlabmock\" AND c.source <> \"gitlabmock\"\n )\n)",
             "refId": "A",
             "sql": {
               "columns": [
@@ -955,6 +955,6 @@
     "timezone": "utc",
     "title": "Four Keys - Node.js Backend - actual",
     "uid": "yVtwoQ4nk4",
-    "version": 3,
+    "version": 1,
     "weekStart": ""
   }
